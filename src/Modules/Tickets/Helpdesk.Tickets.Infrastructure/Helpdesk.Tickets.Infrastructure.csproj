@@ -2,6 +2,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Helpdesk.Tickets.Application\Helpdesk.Tickets.Application.csproj" />
+    <ProjectReference Include="..\Helpdesk.Tickets.Contracts\Helpdesk.Tickets.Contracts.csproj" />
+    <ProjectReference Include="..\Helpdesk.Tickets.Presentation\Helpdesk.Tickets.Presentation.csproj" />
+    <ProjectReference Include="..\..\..\Helpdesk.ModuleKit\Helpdesk.ModuleKit.csproj" />
   </ItemGroup>
 
   <ItemGroup>

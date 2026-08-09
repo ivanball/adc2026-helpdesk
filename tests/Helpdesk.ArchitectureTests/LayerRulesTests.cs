@@ -1,3 +1,4 @@
+using Helpdesk.Notifications.Infrastructure;
 using Helpdesk.Tickets.Application.Abstractions;
 using Helpdesk.Tickets.Domain;
 using NetArchTest.Rules;
@@ -72,6 +73,25 @@ public class LayerRulesTests
             .GetResult();
 
         Assert.True(result.IsSuccessful, "Infrastructure leaked: " + Offenders(result));
-        // Session 6 extends this list with the Notifications assemblies.
+        // Session 6: the Notifications assemblies are covered by
+        // Modules_touch_each_other_only_through_contracts below, which forbids every
+        // Helpdesk.Tickets.* assembly except Helpdesk.Tickets.Contracts.
+    }
+
+    [Fact]
+    public void Modules_touch_each_other_only_through_contracts()
+    {
+        // NotificationsModule is the public anchor for the assembly that also holds the
+        // internal TicketClosedNotificationHandler.
+        var result = Types.InAssembly(typeof(NotificationsModule).Assembly)
+            .ShouldNot()
+            .HaveDependencyOnAny(
+                "Helpdesk.Tickets.Domain",
+                "Helpdesk.Tickets.Application",
+                "Helpdesk.Tickets.Infrastructure",
+                "Helpdesk.Tickets.Presentation")
+            .GetResult();
+
+        Assert.True(result.IsSuccessful, "Notifications reached past the contracts: " + Offenders(result));
     }
 }
