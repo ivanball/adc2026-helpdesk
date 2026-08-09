@@ -9,7 +9,7 @@ Domain, Application, Infrastructure, Presentation. Composition root is Helpdesk.
 
 ## Commands
 - Build: dotnet build Helpdesk.sln
-- Test: dotnet test Helpdesk.sln
+- Test: dotnet test Helpdesk.sln (API tests need the SQL container: docker compose up -d)
 - Run: dotnet run --project src/Helpdesk.Host
 
 ## Layer rules (enforced by tests in Helpdesk.ArchitectureTests)
