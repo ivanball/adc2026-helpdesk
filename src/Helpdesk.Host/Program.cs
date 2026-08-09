@@ -1,3 +1,6 @@
+using Helpdesk.Host;
+using Helpdesk.SharedKernel;
+using Helpdesk.Tickets.Application.Tickets;
 using Helpdesk.Tickets.Infrastructure;
 using Helpdesk.Tickets.Presentation;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +12,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
 
 builder.Services.AddTicketsModule(builder.Configuration);
+
+// Events: the in-process bus, the outbox relay that feeds it, and today's throwaway consumer.
+builder.Services.AddSingleton<IEventBus, InProcessEventBus>();
+builder.Services.AddTicketsOutboxRelay();
+builder.Services.AddScoped<IIntegrationEventHandler<TicketClosedIntegrationEvent>, TicketClosedLoggingHandler>();
 
 // MCP is one more adapter at the API layer: the tools in the Tickets Presentation assembly
 // call the same handlers the HTTP endpoints below call.

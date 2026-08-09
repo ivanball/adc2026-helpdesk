@@ -41,6 +41,35 @@ namespace Helpdesk.Tickets.Infrastructure.Migrations
                     b.ToTable("Tickets");
                 });
 
+            modelBuilder.Entity("Helpdesk.Tickets.Infrastructure.OutboxMessage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Error")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("OccurredOnUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ProcessedOnUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OutboxMessages");
+                });
+
             modelBuilder.Entity("Helpdesk.Tickets.Domain.Ticket", b =>
                 {
                     b.OwnsMany("Helpdesk.Tickets.Domain.ChildTask", "ChildTasks", b1 =>

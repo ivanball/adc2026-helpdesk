@@ -18,4 +18,12 @@ public static class TicketsModuleRegistration
         services.AddTicketsApplication();
         return services;
     }
+
+    // OutboxRelay is internal to this assembly, so the composition root registers it
+    // through this public extension point rather than naming the type.
+    public static IServiceCollection AddTicketsOutboxRelay(this IServiceCollection services)
+    {
+        services.AddHostedService<OutboxRelay>();
+        return services;
+    }
 }
