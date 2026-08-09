@@ -1,0 +1,8 @@
+services:
+  sql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "Workshop!Passw0rd"
+    ports:
+      - "14330:1433"   # host port 14330: a locally installed SQL Server cannot shadow the container
