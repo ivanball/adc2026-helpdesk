@@ -25,6 +25,10 @@
     <ProjectReference Include="..\..\src\Modules\Tickets\Helpdesk.Tickets.Application\Helpdesk.Tickets.Application.csproj" />
     <ProjectReference Include="..\..\src\Modules\Tickets\Helpdesk.Tickets.Infrastructure\Helpdesk.Tickets.Infrastructure.csproj" />
     <ProjectReference Include="..\..\src\Modules\Tickets\Helpdesk.Tickets.Presentation\Helpdesk.Tickets.Presentation.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Tickets\Helpdesk.Tickets.Contracts\Helpdesk.Tickets.Contracts.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Notifications\Helpdesk.Notifications.Application\Helpdesk.Notifications.Application.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Notifications\Helpdesk.Notifications.Infrastructure\Helpdesk.Notifications.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\Helpdesk.ModuleKit\Helpdesk.ModuleKit.csproj" />
   </ItemGroup>
 
 </Project>

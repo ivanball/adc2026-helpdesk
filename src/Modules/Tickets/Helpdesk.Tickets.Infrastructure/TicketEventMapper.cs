@@ -1,5 +1,5 @@
 using Helpdesk.SharedKernel;
-using Helpdesk.Tickets.Application.Tickets;
+using Helpdesk.Tickets.Contracts;
 using Helpdesk.Tickets.Domain;
 
 namespace Helpdesk.Tickets.Infrastructure;

@@ -20,6 +20,12 @@
       "helpdesk.sharedkernel": {
         "type": "Project"
       },
+      "helpdesk.tickets.contracts": {
+        "type": "Project",
+        "dependencies": {
+          "Helpdesk.SharedKernel": "[1.0.0, )"
+        }
+      },
       "helpdesk.tickets.domain": {
         "type": "Project",
         "dependencies": {

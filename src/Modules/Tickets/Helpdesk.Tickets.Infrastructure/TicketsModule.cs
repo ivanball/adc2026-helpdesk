@@ -1,5 +1,8 @@
+using Helpdesk.ModuleKit;
 using Helpdesk.Tickets.Application;
 using Helpdesk.Tickets.Application.Abstractions;
+using Helpdesk.Tickets.Presentation;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,5 +28,19 @@ public static class TicketsModuleRegistration
     {
         services.AddHostedService<OutboxRelay>();
         return services;
+    }
+}
+
+public sealed class TicketsModule : IModule
+{
+    public void Add(IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddTicketsModule(configuration);
+        services.AddTicketsOutboxRelay();
+    }
+
+    public void MapEndpoints(IEndpointRouteBuilder endpoints)
+    {
+        endpoints.MapTicketEndpoints();
     }
 }

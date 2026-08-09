@@ -38,7 +38,14 @@
       "helpdesk.tickets.application": {
         "type": "Project",
         "dependencies": {
+          "Helpdesk.Tickets.Contracts": "[1.0.0, )",
           "Helpdesk.Tickets.Domain": "[1.0.0, )"
+        }
+      },
+      "helpdesk.tickets.contracts": {
+        "type": "Project",
+        "dependencies": {
+          "Helpdesk.SharedKernel": "[1.0.0, )"
         }
       },
       "helpdesk.tickets.domain": {

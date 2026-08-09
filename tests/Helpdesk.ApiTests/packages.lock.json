@@ -935,10 +935,31 @@
       "helpdesk.host": {
         "type": "Project",
         "dependencies": {
+          "Helpdesk.ModuleKit": "[1.0.0, )",
+          "Helpdesk.Notifications.Infrastructure": "[1.0.0, )",
           "Helpdesk.ServiceDefaults": "[1.0.0, )",
           "Helpdesk.Tickets.Infrastructure": "[1.0.0, )",
           "Helpdesk.Tickets.Presentation": "[1.0.0, )",
           "Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore": "[10.0.10, )"
+        }
+      },
+      "helpdesk.modulekit": {
+        "type": "Project"
+      },
+      "helpdesk.notifications.application": {
+        "type": "Project",
+        "dependencies": {
+          "Helpdesk.SharedKernel": "[1.0.0, )",
+          "Helpdesk.Tickets.Contracts": "[1.0.0, )",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "[10.0.10, )"
+        }
+      },
+      "helpdesk.notifications.infrastructure": {
+        "type": "Project",
+        "dependencies": {
+          "Helpdesk.ModuleKit": "[1.0.0, )",
+          "Helpdesk.Notifications.Application": "[1.0.0, )",
+          "Microsoft.EntityFrameworkCore.SqlServer": "[10.0.10, )"
         }
       },
       "helpdesk.servicedefaults": {
@@ -960,9 +981,16 @@
       "helpdesk.tickets.application": {
         "type": "Project",
         "dependencies": {
+          "Helpdesk.Tickets.Contracts": "[1.0.0, )",
           "Helpdesk.Tickets.Domain": "[1.0.0, )",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "[10.0.10, )",
           "Microsoft.Extensions.Logging.Abstractions": "[10.0.10, )"
+        }
+      },
+      "helpdesk.tickets.contracts": {
+        "type": "Project",
+        "dependencies": {
+          "Helpdesk.SharedKernel": "[1.0.0, )"
         }
       },
       "helpdesk.tickets.domain": {
@@ -974,8 +1002,12 @@
       "helpdesk.tickets.infrastructure": {
         "type": "Project",
         "dependencies": {
+          "Helpdesk.ModuleKit": "[1.0.0, )",
           "Helpdesk.Tickets.Application": "[1.0.0, )",
-          "Microsoft.EntityFrameworkCore.SqlServer": "[10.0.10, )"
+          "Helpdesk.Tickets.Contracts": "[1.0.0, )",
+          "Helpdesk.Tickets.Presentation": "[1.0.0, )",
+          "Microsoft.EntityFrameworkCore.SqlServer": "[10.0.10, )",
+          "Microsoft.Extensions.Hosting.Abstractions": "[10.0.10, )"
         }
       },
       "helpdesk.tickets.presentation": {

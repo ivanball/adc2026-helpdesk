@@ -13,8 +13,13 @@ var sql = builder.AddSqlServer("sql")
 // Tickets module already reads. The physical database is still HelpdeskTickets.
 var tickets = sql.AddDatabase("Tickets", "HelpdeskTickets");
 
+// Database per module: the Notifications module owns its own, on the same server instance
+// here because this is a workshop laptop, and never shares a schema with Tickets.
+var notifications = sql.AddDatabase("Notifications", "HelpdeskNotifications");
+
 builder.AddProject<Projects.Helpdesk_Host>("api")
     .WithReference(tickets)
+    .WithReference(notifications)
 
     // WaitFor gates startup on the SQL resource reporting healthy: that is liveness of a
     // dependency, and it is the right thing to wait on. A service must never gate its own
@@ -22,6 +27,7 @@ builder.AddProject<Projects.Helpdesk_Host>("api")
     // the schema is in place, and the schema only arrives after the service starts. Wait on
     // what you depend on, report your own readiness, and never wait on yourself.
     .WaitFor(tickets)
+    .WaitFor(notifications)
 
     // Only the orchestrated run migrates on startup. Labs 1 to 5 keep using
     // dotnet ef database update against the compose container, so the default stays off.

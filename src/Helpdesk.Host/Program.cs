@@ -1,6 +1,7 @@
 using Helpdesk.Host;
+using Helpdesk.ModuleKit;
+using Helpdesk.Notifications.Infrastructure;
 using Helpdesk.SharedKernel;
-using Helpdesk.Tickets.Application.Tickets;
 using Helpdesk.Tickets.Infrastructure;
 using Helpdesk.Tickets.Presentation;
 using Microsoft.EntityFrameworkCore;
@@ -11,12 +12,28 @@ var builder = WebApplication.CreateBuilder(args);
 // Telemetry, resilience, service discovery and the "self" liveness check.
 builder.AddServiceDefaults();
 
-builder.Services.AddTicketsModule(builder.Configuration);
+// The module list. THE EXTRACTION DEMO: comment out the Tickets assembly here, run
+// Helpdesk.Tickets.Host on 5101 and Helpdesk.Gateway on 5200, and the client sees no change.
+var moduleAssemblies = new[]
+{
+    typeof(TicketsModule).Assembly,
+    typeof(NotificationsModule).Assembly,
+};
 
-// Events: the in-process bus, the outbox relay that feeds it, and today's throwaway consumer.
+var modules = moduleAssemblies
+    .SelectMany(assembly => assembly.GetTypes())
+    .Where(type => typeof(IModule).IsAssignableFrom(type) && type is { IsAbstract: false, IsInterface: false })
+    .Select(type => (IModule)Activator.CreateInstance(type)!)
+    .ToList();
+
+foreach (var module in modules)
+{
+    module.Add(builder.Services, builder.Configuration);
+}
+
+// The transport the outbox relay publishes onto. Each module registers its own handlers,
+// so the composition root names the bus and nothing else about the conversation.
 builder.Services.AddSingleton<IEventBus, InProcessEventBus>();
-builder.Services.AddTicketsOutboxRelay();
-builder.Services.AddScoped<IIntegrationEventHandler<TicketClosedIntegrationEvent>, TicketClosedLoggingHandler>();
 
 // MCP is one more adapter at the API layer: the tools in the Tickets Presentation assembly
 // call the same handlers the HTTP endpoints below call.
@@ -27,9 +44,11 @@ builder.Services.AddMcpServer()
     .WithHttpTransport(options => options.SessionMode = HttpServerSessionMode.Stateless)
     .WithToolsFromAssembly(typeof(TicketTools).Assembly);
 
-// Readiness only: this check is untagged, so /health waits on the database and /alive does not.
+// Readiness only: these checks are untagged, so /health waits on both module databases
+// and /alive does not.
 builder.Services.AddHealthChecks()
-    .AddDbContextCheck<TicketsDbContext>("tickets-db");
+    .AddDbContextCheck<TicketsDbContext>("tickets-db")
+    .AddDbContextCheck<NotificationsDbContext>("notifications-db");
 
 var app = builder.Build();
 
@@ -39,14 +58,18 @@ app.MapDefaultEndpoints();
 // Migrations:ApplyOnStartup is off by default, and only the AppHost turns it on. An explicit
 // switch beats sniffing the environment: you can read it in one line, the labs that run the
 // host on its own keep migrating by hand with dotnet ef database update, and the API tests,
-// which drop and re-create their own database in the factory, never migrate twice.
+// which drop and re-create their own databases in the factory, never migrate twice.
 if (app.Configuration.GetValue<bool>("Migrations:ApplyOnStartup"))
 {
     using var scope = app.Services.CreateScope();
     await scope.ServiceProvider.GetRequiredService<TicketsDbContext>().Database.MigrateAsync();
+    await scope.ServiceProvider.GetRequiredService<NotificationsDbContext>().Database.MigrateAsync();
 }
 
-app.MapTicketEndpoints();
+foreach (var module in modules)
+{
+    module.MapEndpoints(app);
+}
 
 // The MCP endpoint sits beside the HTTP routes, not in front of them or instead of them.
 app.MapMcp("/mcp");

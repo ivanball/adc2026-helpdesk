@@ -5,3 +5,5 @@ Rules to enforce in Helpdesk.ArchitectureTests:
 4. Command and query handlers must be internal, not public.
 5. No type outside Helpdesk.Tickets.* may depend on Helpdesk.Tickets.Infrastructure
    (only the Host composition root may, by exception).
+6. No assembly of one module may depend on another module's Domain, Application,
+   Infrastructure or Presentation. Modules meet only in a Contracts project.

@@ -4,6 +4,8 @@
     <ProjectReference Include="..\Helpdesk.ServiceDefaults\Helpdesk.ServiceDefaults.csproj" />
     <ProjectReference Include="..\Modules\Tickets\Helpdesk.Tickets.Presentation\Helpdesk.Tickets.Presentation.csproj" />
     <ProjectReference Include="..\Modules\Tickets\Helpdesk.Tickets.Infrastructure\Helpdesk.Tickets.Infrastructure.csproj" />
+    <ProjectReference Include="..\Helpdesk.ModuleKit\Helpdesk.ModuleKit.csproj" />
+    <ProjectReference Include="..\Modules\Notifications\Helpdesk.Notifications.Infrastructure\Helpdesk.Notifications.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
