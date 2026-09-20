@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <ItemGroup>
+    <ProjectReference Include="..\Helpdesk.ServiceDefaults\Helpdesk.ServiceDefaults.csproj" />
     <ProjectReference Include="..\Modules\Tickets\Helpdesk.Tickets.Presentation\Helpdesk.Tickets.Presentation.csproj" />
     <ProjectReference Include="..\Modules\Tickets\Helpdesk.Tickets.Infrastructure\Helpdesk.Tickets.Infrastructure.csproj" />
   </ItemGroup>
@@ -10,6 +11,8 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <!-- AddDbContextCheck: the readiness half of the health story. -->
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="10.0.10" />
   </ItemGroup>
 
   <PropertyGroup>

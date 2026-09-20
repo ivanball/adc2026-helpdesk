@@ -3,7 +3,8 @@ using System.Net.Http.Json;
 
 namespace Helpdesk.ApiTests;
 
-public class CloseTicketTests(HelpdeskApiFactory factory) : IClassFixture<HelpdeskApiFactory>
+[Collection(ApiCollection.Name)]
+public class CloseTicketTests(HelpdeskApiFactory factory)
 {
     private readonly HttpClient _client = factory.CreateClient();
 
