@@ -1,0 +1,36 @@
+# the agent wrote this from the prompt in the Lab 5 handout; edit as you like
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Log in to the container registry
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # The tag that triggered the run is the image tag, so v0.1.0 publishes
+      # ghcr.io/<owner>/helpdesk:v0.1.0 alongside :latest.
+      - name: Build and push the image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/helpdesk:${{ github.ref_name }}
+            ghcr.io/${{ github.repository_owner }}/helpdesk:latest
