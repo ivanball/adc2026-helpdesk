@@ -6,7 +6,7 @@ namespace Helpdesk.Tickets.Application.Tickets;
 
 public sealed record CreateTicket(string Title) : ICommand<Guid>;
 
-internal sealed class CreateTicketHandler(ITicketRepository tickets, IUnitOfWork unitOfWork)
+public sealed class CreateTicketHandler(ITicketRepository tickets, IUnitOfWork unitOfWork)
     : ICommandHandler<CreateTicket, Guid>
 {
     public async Task<Result<Guid>> Handle(CreateTicket command, CancellationToken ct)

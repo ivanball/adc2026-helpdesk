@@ -13,8 +13,10 @@ public static class TicketEndpoints
     public static IEndpointRouteBuilder MapTicketEndpoints(this IEndpointRouteBuilder app)
     {
         // Slices add endpoints here.
+        // Shortcut: take the concrete handler straight out of the container so the
+        // request skips the validation and logging decorators.
         app.MapPost("/tickets", async (CreateTicketRequest request,
-            ICommandHandler<CreateTicket, Guid> handler, CancellationToken ct) =>
+            CreateTicketHandler handler, CancellationToken ct) =>
         {
             var result = await handler.Handle(new CreateTicket(request.Title), ct);
             return result.IsSuccess
