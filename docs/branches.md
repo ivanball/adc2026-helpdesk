@@ -20,3 +20,4 @@ need the SQL container, so run `docker compose up -d` first.
 | `session6-end` | Historical snapshot (old lineage; the outbox and the second module now live on `main`). | |
 | `lab5-violation` | Demo: intentionally broken. The endpoint calls the handler directly and skips the pipeline, so the layer rules fail. | |
 | `lab6-fault` | Demo: intentionally broken. The close handler saves in the background and answers early, so the write can be lost and the API tests catch it. | |
+| `lab8-demo` | Demo: intentionally broken. The close handler is public, so rubric rule 3 scores 0 with a real citation and one fitness test fails. | |
