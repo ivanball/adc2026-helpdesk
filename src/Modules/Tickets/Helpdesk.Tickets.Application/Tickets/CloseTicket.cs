@@ -6,7 +6,7 @@ namespace Helpdesk.Tickets.Application.Tickets;
 
 public sealed record CloseTicket(Guid TicketId) : ICommand<bool>;
 
-internal sealed class CloseTicketHandler(ITicketRepository tickets, IUnitOfWork unitOfWork)
+public sealed class CloseTicketHandler(ITicketRepository tickets, IUnitOfWork unitOfWork)
     : ICommandHandler<CloseTicket, bool>
 {
     public async Task<Result<bool>> Handle(CloseTicket command, CancellationToken ct)
