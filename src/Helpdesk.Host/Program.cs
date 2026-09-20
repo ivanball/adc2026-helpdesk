@@ -1,6 +1,7 @@
 using Helpdesk.Tickets.Infrastructure;
 using Helpdesk.Tickets.Presentation;
 using Microsoft.EntityFrameworkCore;
+using ModelContextProtocol.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
 
 builder.Services.AddTicketsModule(builder.Configuration);
+
+// MCP is one more adapter at the API layer: the tools in the Tickets Presentation assembly
+// call the same handlers the HTTP endpoints below call.
+// Stateless because the 2026-07-28 specification drops the initialize handshake and the
+// Mcp-Session-Id header from the wire, so every POST stands on its own and no instance has
+// to remember a caller between requests.
+builder.Services.AddMcpServer()
+    .WithHttpTransport(options => options.SessionMode = HttpServerSessionMode.Stateless)
+    .WithToolsFromAssembly(typeof(TicketTools).Assembly);
 
 // Readiness only: this check is untagged, so /health waits on the database and /alive does not.
 builder.Services.AddHealthChecks()
@@ -29,6 +39,10 @@ if (app.Configuration.GetValue<bool>("Migrations:ApplyOnStartup"))
 }
 
 app.MapTicketEndpoints();
+
+// The MCP endpoint sits beside the HTTP routes, not in front of them or instead of them.
+app.MapMcp("/mcp");
+
 app.Run();
 
 // Top-level statements hide the generated entry point class, and

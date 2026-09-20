@@ -12,6 +12,7 @@ Domain, Application, Infrastructure, Presentation. Composition root is Helpdesk.
 - Test: dotnet test Helpdesk.sln (API tests need the SQL container: docker compose up -d)
 - Run: dotnet run --project src/Helpdesk.Host
 - Run (orchestrated): aspire run --project src/Helpdesk.AppHost (dashboard URL is printed)
+- MCP: served at /mcp over streamable HTTP by the Host; stdio fallback: dotnet run --project src/Helpdesk.McpStdio
 - Ship: see docs/shipping.md (CI runs restore in locked mode; run dotnet restore --force-evaluate after changing a package)
 
 ## Layer rules (enforced by tests in Helpdesk.ArchitectureTests)
