@@ -43,8 +43,8 @@ curl -s localhost:5100/tickets/<id>
 Build and test:
 
 ```bash
-dotnet build Helpdesk.sln
-dotnet test Helpdesk.sln
+dotnet build Helpdesk.slnx
+dotnet test Helpdesk.slnx
 ```
 
 ## The extraction demo (three terminals)
