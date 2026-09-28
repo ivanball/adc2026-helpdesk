@@ -31,8 +31,8 @@ One use case per slice. Follow CLAUDE.md and AGENTS.md exactly; they are the con
 6. Add a test. Domain rules go in `tests/Helpdesk.<Module>.Domain.Tests`. Status-code
    mapping goes in `tests/Helpdesk.ApiTests`, which drives the real host against the SQL
    Server container.
-7. Verify: run `docker compose up -d`, then `dotnet build Helpdesk.sln` and
-   `dotnet test Helpdesk.sln`. Show the output. Warnings are errors, so a build that
+7. Verify: run `docker compose up -d`, then `dotnet build Helpdesk.slnx` and
+   `dotnet test Helpdesk.slnx`. Show the output. Warnings are errors, so a build that
    reports any warning is a failure.
 
 ## Constraints

@@ -4,8 +4,8 @@ Modular monolith on .NET 10. Modules live under src/Modules/<Name> with four pro
 Domain, Application, Infrastructure, Presentation. Composition root is Helpdesk.Host.
 
 ## Commands
-- Build: dotnet build Helpdesk.sln
-- Test: dotnet test Helpdesk.sln (API tests need the SQL container: docker compose up -d)
+- Build: dotnet build Helpdesk.slnx
+- Test: dotnet test Helpdesk.slnx (API tests need the SQL container: docker compose up -d)
 - Run: dotnet run --project src/Helpdesk.Host
 
 ## Layer rules (enforced by tests in Helpdesk.ArchitectureTests)
