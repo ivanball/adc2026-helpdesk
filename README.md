@@ -39,7 +39,7 @@ aspire run --project src/Helpdesk.AppHost
 ## Test it
 
 ```sh
-dotnet test Helpdesk.sln
+dotnet test Helpdesk.slnx
 ```
 
 The API tests boot the real host against the SQL container on 14330, so `docker compose up -d`
