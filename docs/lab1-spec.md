@@ -1,5 +1,5 @@
 Create the solution skeleton described in CLAUDE.md:
-- Helpdesk.sln at the root; projects per the layout in CLAUDE.md.
+- Helpdesk.slnx at the root; projects per the layout in CLAUDE.md.
 - SharedKernel, Domain, Application: classlib. Infrastructure: classlib with
   Microsoft.EntityFrameworkCore.SqlServer. Presentation: classlib with a
   Microsoft.AspNetCore.App framework reference. Host: web project.
