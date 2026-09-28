@@ -3,7 +3,7 @@
 Every lab ends on a branch. If you fall behind, check out the branch for the lab you
 just finished and keep going: `git checkout lab4-end`.
 
-The test count is what `dotnet test Helpdesk.sln` reports on that branch. The API tests
+The test count is what `dotnet test Helpdesk.slnx` reports on that branch. The API tests
 need the SQL container, so run `docker compose up -d` first.
 
 | Branch | What it adds | Tests |
