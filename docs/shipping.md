@@ -92,7 +92,7 @@ committed `packages.lock.json` files do not already list. So after you change a
 package version, regenerate the lock files and commit them:
 
 ```sh
-dotnet restore Helpdesk.sln --force-evaluate
+dotnet restore Helpdesk.slnx --force-evaluate
 ```
 
 `NuGetAuditMode` is set to `all` and `NuGetAuditLevel` to `low`, so a known
