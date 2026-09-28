@@ -1,0 +1,23 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/src/">
+    <Project Path="src/Helpdesk.Host/Helpdesk.Host.csproj" />
+    <Project Path="src/Helpdesk.SharedKernel/Helpdesk.SharedKernel.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/" />
+  <Folder Name="/src/Modules/Tickets/">
+    <Project Path="src/Modules/Tickets/Helpdesk.Tickets.Application/Helpdesk.Tickets.Application.csproj" />
+    <Project Path="src/Modules/Tickets/Helpdesk.Tickets.Domain/Helpdesk.Tickets.Domain.csproj" />
+    <Project Path="src/Modules/Tickets/Helpdesk.Tickets.Infrastructure/Helpdesk.Tickets.Infrastructure.csproj" />
+    <Project Path="src/Modules/Tickets/Helpdesk.Tickets.Presentation/Helpdesk.Tickets.Presentation.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Helpdesk.ApiTests/Helpdesk.ApiTests.csproj" />
+    <Project Path="tests/Helpdesk.ArchitectureTests/Helpdesk.ArchitectureTests.csproj" />
+    <Project Path="tests/Helpdesk.Tickets.Domain.Tests/Helpdesk.Tickets.Domain.Tests.csproj" />
+  </Folder>
+</Solution>
