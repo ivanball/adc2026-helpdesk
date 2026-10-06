@@ -5,6 +5,7 @@ hosted inside the same process, serving the same three ticket operations to an a
 
 Everything below runs from the repository root, with the SQL container up
 (`docker compose up -d`) and the host running (`dotnet run --project src/Helpdesk.Host`).
+MCP Inspector needs Node.js 22.19 or newer (24 LTS recommended).
 
 ## 1. What was added, and why it is one more adapter
 
@@ -46,13 +47,25 @@ with the MCP 2026-07-28 specification"; 2.2.0 is the current stable release on t
 Inspector is the fastest way to see the tool list without wiring an agent up first.
 
 ```sh
-npx @modelcontextprotocol/inspector
+npx @modelcontextprotocol/inspector@latest
 ```
 
-It opens a browser tab. Choose transport **Streamable HTTP**, set the URL to
-`http://localhost:5000/mcp`, and connect. Click **Tools**, then **List Tools**: three tools,
-each with the descriptions from `TicketTools.cs` and a generated input schema. Run
-`create_ticket` with a title, copy the id it returns, and run `get_ticket` with it.
+(`@latest` on purpose: a bare `npx @modelcontextprotocol/inspector` can reuse an old copy from
+your npx cache, and the v1 line is deprecated with a different command line.)
+
+It opens a browser tab on a **Servers** page that already lists three example servers. Then,
+exactly:
+
+1. **Add Servers**, then **+ Add manually**.
+2. Server ID `helpdesk`; Transport **streamable-http** (not stdio, not sse); URL
+   `http://localhost:5000/mcp`. The path matters; the bare origin is your ticket API. **Add**.
+3. Flip the switch on the `helpdesk` card: it turns green and reads **Connected**. The card
+   shows `MCP 2025-11-25`: Inspector negotiates the older revision, and the server accepts both.
+4. **Tools** in the top bar. The three tools are listed straight away; there is no List Tools
+   button. Click one to see its description and parameters.
+5. Select `create_ticket`, type a title, **Execute Tool**. Copy the id from **Results**.
+6. Select `get_ticket`, paste the id into `ticketId`, **Execute Tool**. Id, status, title and
+   child task count come back as one line of text.
 
 Read the descriptions in the Inspector pane rather than in the source. That text is the only
 thing a model has to decide with, which is why it is written the way it is: what the tool
@@ -90,9 +103,17 @@ Then `/mcp` inside Claude Code lists the server and its tools. Remove it again w
 Some clients only know how to launch a process. `src/Helpdesk.McpStdio` is the same tools
 over stdin and stdout:
 
+List its tools through Inspector's CLI, which launches the process and talks to it over the
+pipe:
+
 ```sh
-dotnet run --project src/Helpdesk.McpStdio
+npx @modelcontextprotocol/inspector@latest --cli dotnet run --cwd src/Helpdesk.McpStdio --method tools/list
 ```
+
+`--cwd` is Inspector's option: the working directory of the process it launches. With
+`--project src/Helpdesk.McpStdio` in its place, `dotnet run` answers
+`Couldn't find a project to run`. (Run on its own, `dotnet run --project src/Helpdesk.McpStdio`
+just waits for a client on stdin; Ctrl+C stops it.)
 
 It reads `ConnectionStrings:Tickets` from configuration and falls back to the compose
 container on port 14330, so it needs no arguments in the lab. Logs go to stderr, because on
@@ -103,6 +124,7 @@ of a URL:
 {
   "servers": {
     "helpdesk-stdio": {
+      "type": "stdio",
       "command": "dotnet",
       "args": ["run", "--project", "src/Helpdesk.McpStdio"]
     }

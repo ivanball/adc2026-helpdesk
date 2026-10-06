@@ -11,7 +11,9 @@
     "deny": [
       "Bash(dotnet ef database drop:*)",
       "Bash(git push --force:*)",
-      "Bash(rm -rf:*)"
+      "Bash(rm -rf:*)",
+      "Read(./.env)",
+      "Read(./**/*.pem)"
     ]
   },
   "sandbox": {

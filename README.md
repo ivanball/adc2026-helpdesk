@@ -33,7 +33,7 @@ Or let Aspire start the database, migrate it and run the app, with a dashboard f
 logs and metrics:
 
 ```sh
-aspire run --project src/Helpdesk.AppHost
+aspire run --apphost src/Helpdesk.AppHost
 ```
 
 ## Test it
