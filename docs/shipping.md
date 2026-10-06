@@ -14,12 +14,16 @@ account name, in lower case (container registry names must be lower case).
   publishes the image to `ghcr.io/<owner>/helpdesk`.
 - `.github/workflows/agent-review.yml` asks an agent to review each pull request.
   It needs an `ANTHROPIC_API_KEY` repository secret. Skip it if you do not have one.
+  It is advisory: it is not in the protection body below, so it never blocks a merge.
 
 ## 1. Create the repository and push
 
-Branch protection is free on public repositories only, so create it public.
+Branch protection is free on public repositories only, so create it public. Name the
+local branch `main` first: whatever you push becomes the default branch, and step 2
+protects `main` by name.
 
 ```sh
+git branch -M main
 gh repo create <owner>/helpdesk --public --source=. --remote=origin --push
 ```
 
@@ -48,27 +52,69 @@ which matters when you are the only person in the repository.
 `lab5-violation` takes a shortcut the architecture tests forbid: the endpoint injects
 the concrete command handler instead of the interface, which means the handler had to
 become public and the request now skips the validation and logging decorators. It
-compiles cleanly. Push it and open a pull request to watch CI go red on the fitness
-test rather than on the compiler.
+compiles cleanly. Make the change on a branch (`git checkout -b lab5-violation`),
+commit it, push it and open a pull request to watch CI go red on the fitness test
+rather than on the compiler. If you fetched the `lab5-violation` branch instead, it is
+already committed: skip the first line.
 
 ```sh
-git push -u origin lab5-violation && gh pr create --base main --head lab5-violation --title "Call the handler straight from the endpoint" --body "Deliberate layer violation. CI should reject this."
+git commit -am "Call the handler straight from the endpoint"
+git push -u origin lab5-violation
+gh pr create --base main --head lab5-violation --title "Call the handler straight from the endpoint" --body "Deliberate layer violation. CI should reject this."
 ```
 
-The failing check is `Architecture (fitness) tests`, and the message names the offender:
-`Public handlers found: Helpdesk.Tickets.Application.Tickets.CreateTicketHandler`.
+In the run's step list `Architecture (fitness) tests` has the red X and
+`API integration tests` is skipped. The step log names the offender:
 
-## 4. Fix it, then merge
+```text
+  Failed Helpdesk.ArchitectureTests.LayerRulesTests.Rule4_Handlers_are_internal [72 ms]
+  Error Message:
+   Public handlers found: Helpdesk.Tickets.Application.Tickets.CreateTicketHandler
+```
 
-Push a fix to the same branch, wait for `build-and-test` to go green, and squash it in.
+## 4. Fix it, then close the pull request
+
+Put the interface back in the endpoint and `internal` back on the handler, then commit
+and push to the same branch:
+
+```sh
+git commit -am "Put the interface back" && git push
+```
+
+Wait for `build-and-test` to go green, then close the pull request rather than
+merging it:
+
+```sh
+gh pr close lab5-violation
+```
+
+The fix reverted both edits, so the branch now changes nothing, and squash-merging it
+would put an empty commit named after the violation into `main`.
+
+## 5. Land the image files, then tag a release
+
+`Dockerfile`, `.dockerignore` and `.github/workflows/release.yml` reach `main` through
+a pull request like everything else. Start from an up-to-date `main`:
+
+```sh
+git checkout main && git pull
+git checkout -b ship-image && git add -A && git commit -m "Dockerfile and release workflow" && git push -u origin ship-image
+gh pr create --base main --head ship-image --title "Dockerfile and release workflow" --body "Release on tag."
+```
+
+If the three files were already on `main` when you pushed in step 1, there is nothing
+to commit here: skip this block and the merge, and go straight to the tag.
+
+Wait for `build-and-test` to go green, then squash it in:
 
 ```sh
 gh pr merge --squash --delete-branch
 ```
 
-## 5. Tag a release
+Type the merge yourself. If you ask the agent, the `confirm-merge.sh` hook refuses it.
 
-Pushing the tag is what triggers `release.yml`. The tag name becomes the image tag.
+The merge to `main` only runs CI. Pushing the tag is what triggers `release.yml`, and
+the tag name becomes the image tag:
 
 ```sh
 git checkout main && git pull && git tag v0.1.0 && git push origin v0.1.0
@@ -80,10 +126,15 @@ Wait for the release run to finish, then:
 
 ```sh
 docker pull ghcr.io/<owner>/helpdesk:v0.1.0
+docker run --rm -p 8080:8080 ghcr.io/<owner>/helpdesk:v0.1.0
 ```
 
-The package starts out private. Make it public from the package settings page if you
-want somebody else to pull it.
+It starts without a database and answers `/health` on port 8080.
+
+The package is linked to your public repository and inherits its visibility, so it is
+public: anyone can `docker pull` it without logging in. In a private repository the
+package is private too, and a teammate's pull is denied until you grant access on the
+package settings page.
 
 ## Day to day
 
