@@ -1,8 +1,9 @@
 # Helpdesk (agent instructions)
 
 Kept identical to CLAUDE.md, rule for rule. Tools that read AGENTS.md (Codex, GitHub Copilot
-coding agent, Cursor, Gemini CLI) onboard from this file; Claude Code reads CLAUDE.md. One set
-of rules, two file names, so every agent and every human starts from the same contract.
+coding agent, Cursor, and Gemini CLI when configured to) onboard from this file; Claude Code
+reads CLAUDE.md. One set of rules, two file names, so every agent and every human starts from
+the same contract.
 
 Modular monolith on .NET 10. Modules live under src/Modules/<Name> with four projects:
 Domain, Application, Infrastructure, Presentation. Composition root is Helpdesk.Host.
