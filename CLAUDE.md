@@ -9,7 +9,7 @@ Domain, Application, Infrastructure, Presentation. Composition root is Helpdesk.
 - Run: dotnet run --project src/Helpdesk.Host
 - Run (orchestrated): aspire run --apphost src/Helpdesk.AppHost (dashboard URL is printed)
 - MCP: served at /mcp over streamable HTTP by the Host; stdio fallback: dotnet run --project src/Helpdesk.McpStdio
-- Ship: see docs/shipping.md (CI runs restore in locked mode; run dotnet restore --force-evaluate after changing a package)
+- Ship: CI is .github/workflows/ci.yml (one job, build-and-test, the required check on main; restore runs in locked mode, so run dotnet restore --force-evaluate after changing a package). Release: push a v* tag; .github/workflows/release.yml publishes the image to GHCR.
 
 ## Layer rules (enforced by tests in Helpdesk.ArchitectureTests)
 - Domain references only Helpdesk.SharedKernel. No NuGet packages in Domain.
