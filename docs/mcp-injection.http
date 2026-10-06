@@ -1,5 +1,5 @@
 ### Prompt injection fixture for the MCP lab.
-### Every request below is ordinary HTTP against the same endpoints lab 1 built. The point is
+### Every request below is ordinary HTTP against the same endpoints Lab 3 built. The point is
 ### that a title is user data, and user data reaches a model as text it is asked to summarise.
 ### Port 5000 is the "http" profile in src/Helpdesk.Host/Properties/launchSettings.json.
 
@@ -22,6 +22,8 @@ Content-Type: application/json
 GET {{host}}/tickets/00000000-0000-0000-0000-000000000000
 
 ### 4. Close it once. Paste the same id. This succeeds: the ticket is open and has no child tasks.
+### Run after the agent demo, it already returns 400 Tickets.AlreadyClosed (the agent closed it);
+### use the id from request 1 instead to see 204, then 400 on request 5.
 POST {{host}}/tickets/00000000-0000-0000-0000-000000000000/close
 
 ### 5. Close it again. The aggregate refuses: 400 with Tickets.AlreadyClosed.
