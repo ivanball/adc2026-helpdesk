@@ -1,11 +1,15 @@
 Create the solution skeleton described in CLAUDE.md:
-- Helpdesk.slnx at the root; projects per the layout in CLAUDE.md.
+- Helpdesk.slnx at the root. Projects: src/Helpdesk.SharedKernel, src/Helpdesk.Host,
+  src/Modules/Tickets/Helpdesk.Tickets.{Domain,Application,Infrastructure,Presentation},
+  tests/Helpdesk.Tickets.Domain.Tests, tests/Helpdesk.ArchitectureTests.
 - SharedKernel, Domain, Application: classlib. Infrastructure: classlib with
   Microsoft.EntityFrameworkCore.SqlServer. Presentation: classlib with a
   Microsoft.AspNetCore.App framework reference. Host: web project.
 - Test projects use xUnit; ArchitectureTests also gets NetArchTest.Rules and references
   SharedKernel plus all four Tickets projects.
-- Wire ONLY the project references allowed by the layer rules in CLAUDE.md.
+- Wire ONLY these project references: Domain -> SharedKernel; Application -> Domain;
+  Infrastructure -> Application; Presentation -> Application; Host -> Presentation,
+  Infrastructure; Domain.Tests -> Domain; ArchitectureTests as above.
 - Each classlib gets one placeholder file ModuleInfo.cs in its root namespace:
   public static class ModuleInfo { public const string Name = "Tickets"; } (Name is
   "SharedKernel" in Helpdesk.SharedKernel). Each test project gets one PlaceholderTests.cs

@@ -1,4 +1,4 @@
-<Project Sdk="Aspire.AppHost.Sdk/13.0.0">
+<Project Sdk="Aspire.AppHost.Sdk/13.6.0">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -6,19 +6,21 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <UserSecretsId>fa654e4e-cef4-41a0-9f4b-8a6f8f30bdbe</UserSecretsId>
-    <!-- The AppHost SDK adds a dashboard package for the restoring machines own
+    <!-- The AppHost SDK adds a dashboard package for the restoring machine's own
          platform (Aspire.Dashboard.Sdk.win-x64 on a Windows laptop), so its lock file
          can never match the Linux CI runner and locked mode fails with NU1004.
          The AppHost never ships (the image is published from Helpdesk.Host), so it
          opts out of the lock files Lab 5 turned on everywhere else. -->
     <RestorePackagesWithLockFile>false</RestorePackagesWithLockFile>
+    <AspireUseCliBundle>true</AspireUseCliBundle>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aspire.Hosting.SqlServer" Version="13.0.0" />
-    <!-- The AppHost pulls MessagePack 2.5.192 transitively (Kubernetes client), and that
-         version carries published advisories. NuGetAudit is on, so the build refuses it.
-         Naming the package directly pins the fixed version. Bump, never suppress. -->
+    <!-- Match the Aspire.AppHost.Sdk version on the Project line. -->
+    <PackageReference Include="Aspire.Hosting.SqlServer" Version="13.6.0" />
+    <!-- Aspire 13.0 pulled MessagePack 2.5.192 transitively, a version with published
+         advisories, and NuGetAudit refused the build. 13.6 pulls a clean 2.5.302; naming
+         the package directly keeps a fixed floor whatever the SDK pulls. Bump, never suppress. -->
     <PackageReference Include="MessagePack" Version="2.5.303" />
   </ItemGroup>
 
