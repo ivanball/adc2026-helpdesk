@@ -14,7 +14,7 @@ need the SQL container, so run `docker compose up -d` first.
 | `lab4-end` | Executable layer rules: five NetArchTest fitness tests, `docs/architecture-rules.md`, and the two agent hooks that deny dangerous commands and confirm a merge. | 11 |
 | `lab5-end` | Shipping: `Dockerfile`, `.dockerignore`, the CI, release and agent-review workflows, lock files and locked-mode restore. | 11 |
 | `lab6-end` | Running it: the Aspire AppHost and service defaults, `/alive` and `/health`, the dashboard walkthrough in `docs/running.md`. | 13 |
-| `lab7-end` | Extending it: the MCP server hosted by the app at `/mcp`, the ticket tools, the stdio fallback host, `docs/mcp.md`. | 16 |
+| `lab7-end` | Extending it: the MCP server hosted by the app at `/mcp`, the ticket tools, `docs/mcp.md`. | 16 |
 | `main` | Everything above, plus the outbox and the in-process event bus, the Notifications module talking to Tickets only through `Helpdesk.Tickets.Contracts`, `IModule` discovery in the host, and the extracted `Helpdesk.Tickets.Host` behind the YARP gateway. This is the take-home branch. | 17 |
 | `session4-end` | Historical snapshot (old lineage; the outbox and the second module now live on `main`). | |
 | `session6-end` | Historical snapshot (old lineage; the outbox and the second module now live on `main`). | |
