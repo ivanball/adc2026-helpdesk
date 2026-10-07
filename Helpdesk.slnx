@@ -2,7 +2,6 @@
   <Folder Name="/src/">
     <Project Path="src/Helpdesk.AppHost/Helpdesk.AppHost.csproj" />
     <Project Path="src/Helpdesk.Host/Helpdesk.Host.csproj" />
-    <Project Path="src/Helpdesk.McpStdio/Helpdesk.McpStdio.csproj" />
     <Project Path="src/Helpdesk.ServiceDefaults/Helpdesk.ServiceDefaults.csproj" />
     <Project Path="src/Helpdesk.SharedKernel/Helpdesk.SharedKernel.csproj" />
   </Folder>

@@ -9,7 +9,7 @@ MCP Inspector needs Node.js 22.19 or newer (24 LTS recommended).
 
 ## 1. What was added, and why it is one more adapter
 
-Three files carry the whole feature:
+Two files carry the whole feature:
 
 - `src/Modules/Tickets/Helpdesk.Tickets.Presentation/TicketTools.cs` declares three tools,
   `create_ticket`, `close_ticket` and `get_ticket`. Each one injects the same handler
@@ -17,7 +17,6 @@ Three files carry the whole feature:
   `Result` into either text or a tool error. There is no rule in that file and no query.
 - `src/Helpdesk.Host/Program.cs` registers the server and maps it at `/mcp`, two lines
   beside `app.MapTicketEndpoints()`.
-- `src/Helpdesk.McpStdio` is the same three tools behind a pipe instead of a port.
 
 That is the thesis. MCP is a protocol adapter at the API layer, a sibling of the minimal
 API endpoints, not a layer of its own and not a second way to reach the database. A tool
@@ -38,7 +37,7 @@ Two details worth pausing on:
   a caller back to the instance that remembers it.
 
 The SDK is pinned at **2.2.0** (`ModelContextProtocol.AspNetCore` in the Presentation
-project, `ModelContextProtocol` for the client in the tests and for the stdio host). Version
+project, `ModelContextProtocol` for the client in the tests). Version
 2.0.0 of the C# SDK is the release that brought it, in its own words, "into stable alignment
 with the MCP 2026-07-28 specification"; 2.2.0 is the current stable release on that line.
 
@@ -98,44 +97,7 @@ claude mcp add --transport http helpdesk http://localhost:5000/mcp
 Then `/mcp` inside Claude Code lists the server and its tools. Remove it again with
 `claude mcp remove helpdesk` when the lab is over.
 
-## 5. The stdio fallback
-
-Some clients only know how to launch a process. `src/Helpdesk.McpStdio` is the same tools
-over stdin and stdout:
-
-List its tools through Inspector's CLI, which launches the process and talks to it over the
-pipe:
-
-```sh
-npx @modelcontextprotocol/inspector@latest --cli dotnet run --cwd src/Helpdesk.McpStdio --method tools/list
-```
-
-`--cwd` is Inspector's option: the working directory of the process it launches. With
-`--project src/Helpdesk.McpStdio` in its place, `dotnet run` answers
-`Couldn't find a project to run`. (Run on its own, `dotnet run --project src/Helpdesk.McpStdio`
-just waits for a client on stdin; Ctrl+C stops it.)
-
-It reads `ConnectionStrings:Tickets` from configuration and falls back to the compose
-container on port 14330, so it needs no arguments in the lab. Logs go to stderr, because on
-stdio the protocol owns stdout. As a client entry it is a `command` and `args` pair instead
-of a URL:
-
-```json
-{
-  "servers": {
-    "helpdesk-stdio": {
-      "type": "stdio",
-      "command": "dotnet",
-      "args": ["run", "--project", "src/Helpdesk.McpStdio"]
-    }
-  }
-}
-```
-
-Prefer the HTTP server. The stdio host exists because the protocol supports it and because
-it makes the point that the transport is the only thing that changed.
-
-## 6. The exercise: a poisoned ticket title
+## 5. The exercise: a poisoned ticket title
 
 A ticket title is text a stranger typed. `get_ticket` hands that text to a model. So the
 model is going to read instructions written by someone who is not you.
@@ -176,7 +138,7 @@ defence is structural. Untrusted text reaching a model is a given, so the questi
 the model can reach when it believes the text, and that answer was fixed at design time by
 the three method signatures in `TicketTools.cs` and by the rules in `Ticket.cs`.
 
-## 7. What production adds
+## 6. What production adds
 
 Nothing in this lab is authenticated. Anyone who can reach port 5000 can call the tools,
 which is the same posture the HTTP endpoints have had since lab 1 and fine for a workshop.
