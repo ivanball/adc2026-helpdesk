@@ -6,12 +6,20 @@
       "Bash(dotnet test:*)",
       "Bash(git status)",
       "Bash(git diff:*)",
-      "Bash(git log:*)"
+      "Bash(git log:*)",
+      "PowerShell(dotnet build *)",
+      "PowerShell(dotnet test *)",
+      "PowerShell(git status)",
+      "PowerShell(git diff *)",
+      "PowerShell(git log *)"
     ],
     "deny": [
       "Bash(dotnet ef database drop:*)",
       "Bash(git push --force:*)",
       "Bash(rm -rf:*)",
+      "PowerShell(dotnet ef database drop *)",
+      "PowerShell(git push --force *)",
+      "PowerShell(Remove-Item *-Recurse*)",
       "Read(./.env)",
       "Read(./**/*.pem)"
     ]
@@ -24,7 +32,7 @@
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "Bash",
+        "matcher": "Bash|PowerShell",
         "hooks": [
           { "type": "command", "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/block-dangerous.sh" },
           { "type": "command", "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/confirm-merge.sh" }
