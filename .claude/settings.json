@@ -24,11 +24,6 @@
       "Read(./**/*.pem)"
     ]
   },
-  "sandbox": {
-    "enabled": true,
-    "autoAllowBashIfSandboxed": true,
-    "excludedCommands": ["docker compose:*"]
-  },
   "hooks": {
     "PreToolUse": [
       {
