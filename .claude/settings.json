@@ -29,8 +29,8 @@
       {
         "matcher": "Bash|PowerShell",
         "hooks": [
-          { "type": "command", "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/block-dangerous.sh" },
-          { "type": "command", "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/confirm-merge.sh" }
+          { "type": "command", "command": "\"${CLAUDE_PROJECT_DIR}\"/.claude/hooks/block-dangerous.sh" },
+          { "type": "command", "command": "\"${CLAUDE_PROJECT_DIR}\"/.claude/hooks/confirm-merge.sh" }
         ]
       }
     ]
